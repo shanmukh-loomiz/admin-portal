@@ -24,3 +24,38 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+@font-face {
+  font-family: 'NSmedium';
+  src: local("NSmedium"),url('../app/Fonts/noto-sans/NotoSans-Medium.ttf') format('truetype'); /* Update the file path accordingly */
+}
+
+@font-face {
+  font-family: 'NSextrabold';
+  src: local("NSextrabold"),url('../app/Fonts/noto-sans/NotoSans-ExtraBold.ttf') format('truetype'); /* Update the file path accordingly */
+}
+
+
+@font-face {
+  font-family: 'NSregular';
+  src: local("NSregular"),url('../app/Fonts/noto-sans/NotoSans-Regular.ttf') format('truetype'); /* Update the file path accordingly */
+}
+
+
+@font-face {
+  font-family: 'Smedium';
+  src: local("Smedium"),url('../app/Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Medium.woff') format('woff'); /* Update the file path accordingly */
+}
+
+@font-face {
+  font-family: 'Sbold';
+  src: local("Sbold"),url('../app/Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Bold.woff') format('woff'); /* Update the file path accordingly */
+}
+
+@font-face {
+  font-family: 'Sregular';
+  src: local("Sregular"),url('../app/Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Regular.woff') format('woff'); /* Update the file path accordingly */
+}
+
+
