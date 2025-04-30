@@ -1,21 +1,21 @@
-'use client';
-import React, { useState } from 'react';
+"use client";
+import React, { useState } from "react";
 
 const Sidebar = () => {
   const mainItems = [
-    { label: 'Dashboard', icon: '/SidebarDashboardLogo.svg' },
-    { label: 'Orders', icon: '/SidebarOrderTrackingLogo.svg' },
-    { label: 'Payments', icon: '/SidebarPaymentLogo.svg' },
-    { label: 'Chat', icon: '/SidebarChatsLogo.svg' },
-    { label: 'Product', icon: '/SidebarProductLogo.svg' },
-    { label: 'Operations', icon: '/SidebarOperationsLogo.svg' },
-    { label: 'Vendor Management', icon: '/SidebarVendorLogo.svg' },
+    { label: "Dashboard", icon: "/SidebarDashboardLogo.svg" },
+    { label: "Orders", icon: "/SidebarOrderTrackingLogo.svg" },
+    { label: "Payments", icon: "/SidebarPaymentLogo.svg" },
+    { label: "Chat", icon: "/SidebarChatsLogo.svg" },
+    { label: "Product", icon: "/SidebarProductLogo.svg" },
+    { label: "Operations", icon: "/SidebarOperationsLogo.svg" },
+    { label: "Vendor Management", icon: "/SidebarVendorLogo.svg" },
   ];
 
   const [expandedIndex, setExpandedIndex] = useState(null);
 
   const toggleDropdown = (index) => {
-    setExpandedIndex(prev => (prev === index ? null : index));
+    setExpandedIndex((prev) => (prev === index ? null : index));
   };
 
   return (
@@ -24,11 +24,13 @@ const Sidebar = () => {
         <ul className="list-none px-3 m-0">
           {mainItems.map((item, index) => (
             <li key={index} className="mb-2">
-              <div
-                className="flex justify-between items-center py-3 px-2 text-[18px] text-[#060B14] font-[Sregular] hover:bg-[#dbe9ff] rounded-md transition"
-              >
+              <div className="flex justify-between items-center py-3 px-2 text-[18px] text-[#060B14] font-[Sregular] hover:bg-[#dbe9ff] rounded-md transition">
                 <div className="flex items-center">
-                  <img src={item.icon} alt={`${item.label} icon`} className="w-[24px] h-[24px] mr-3" />
+                  <img
+                    src={item.icon}
+                    alt={`${item.label} icon`}
+                    className="w-[24px] h-[24px] mr-3"
+                  />
                   <span>{item.label}</span>
                 </div>
 
@@ -41,11 +43,12 @@ const Sidebar = () => {
                   className="focus:outline-none"
                 >
                   <img
-  src="/DropdownButton.svg"
-  alt="Expand"
-  
-  className={`w-[24px] h-[24px] transition-transform ${expandedIndex === index ? 'rotate-180' : ''}`}
-/>
+                    src="/DropdownButton.svg"
+                    alt="Expand"
+                    className={`w-[24px] h-[24px] transition-transform ${
+                      expandedIndex === index ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
               </div>
 

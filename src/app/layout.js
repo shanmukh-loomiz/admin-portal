@@ -4,6 +4,8 @@ import "./globals.css";
 import Navbar from "../app/components/navbar";
 import Sidebar from "./components/sidebar";
 import VendorManagement from "./components/VendorMangement";
+import BrandVerification from "./components/BrandVerification";
+import AddProduct from "./components/AddProduct";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -29,7 +31,8 @@ export default function RootLayout({ children }) {
 <Navbar />
 <Sidebar />
 <VendorManagement />
-        
+<BrandVerification />
+<AddProduct />        
         {children}
       </body>
     </html>

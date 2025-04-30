@@ -41,7 +41,7 @@ export default function VendorManagement() {
   };
 
   return (
-    <div className="ml-[340px] mt-[75px] p-6 bg-[#F9F9F9] min-h-[calc(100vh-75px)] mr-[50px]">
+    <div className="ml-[340px] mt-[75px] p-6 bg-[#fff] min-h-[calc(100vh-75px)] mr-[50px]  rounded-[20px] mb-[50px]">
 
       {/* Title */}
       <div className="flex items-start justify-between ">
