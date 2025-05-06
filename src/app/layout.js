@@ -1,11 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import Navbar from "../app/components/navbar";
+import Navbar from "./components/navbar";
 import Sidebar from "./components/sidebar";
-import VendorManagement from "./components/VendorMangement";
-import BrandVerification from "./components/BrandVerification";
-import AddProduct from "./components/AddProduct";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -27,13 +25,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-
-<Navbar />
-<Sidebar />
-<VendorManagement />
-<BrandVerification />
-<AddProduct />        
-        {children}
+        <Navbar />
+        <div className="flex w-full">
+          <Sidebar />
+          <main className="w-full">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
