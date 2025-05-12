@@ -3,6 +3,14 @@ import "./globals.css";
 
 import Navbar from "./components/navbar";
 import Sidebar from "./components/sidebar";
+// import VendorManagement from "./components/VendorMangement";
+import BrandVerification from "./components/BrandVerification";
+import AddProduct from "./components/AddProduct";
+import RFQReceived from "./components/RFQRecieved";
+import WebsiteData from "./components/WebsiteData";
+import AppData from "./components/AppData";
+import Queries from "./components/Queries";
+import VerifiedBrands from "./components/VerifiedBrands";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,6 +38,20 @@ export default function RootLayout({ children }) {
           <Sidebar />
           <main className="w-full">
             {children}
+            {/* <VendorManagement /> */}
+<BrandVerification />
+<AddProduct /> 
+
+{/* For Web  */}
+ <WebsiteData />
+<RFQReceived /> 
+
+
+  {/* For App */}
+  <AppData />
+  <Queries /> 
+
+  <VerifiedBrands />
           </main>
         </div>
       </body>
