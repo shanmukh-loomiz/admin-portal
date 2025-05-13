@@ -5,7 +5,6 @@ import Navbar from "./components/navbar";
 import Sidebar from "./components/sidebar";
 // import VendorManagement from "./components/VendorMangement";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -33,7 +32,6 @@ export default function RootLayout({ children }) {
           <main className="w-full">
             {children}
             {/* <VendorManagement /> */}
-
           </main>
         </div>
       </body>

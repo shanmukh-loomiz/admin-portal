@@ -6,12 +6,28 @@ const Sidebar = () => {
   const router = useRouter();
   
   const mainItems = [
-    { label: "Dashboard", icon: "/SidebarDashboardLogo.svg" },
-    { label: "Orders", icon: "/SidebarOrderTrackingLogo.svg" },
-    { label: "Payments", icon: "/SidebarPaymentLogo.svg" },
-    { label: "Chat", icon: "/SidebarChatsLogo.svg" },
-    { label: "Product", icon: "/SidebarProductLogo.svg" },
-    { label: "Operations", icon: "/SidebarOperationsLogo.svg" },
+    { label: "Dashboard", icon: "/SidebarDashboardLogo.svg", hasDropdown : false },
+    {
+      label: "Orders",
+      icon: "/SidebarOrderTrackingLogo.svg",
+      hasDropdown: true,
+      subRoutes: [
+        { name: "Through Web", path: "/orders/websiteData" },
+        { name: "Through App", path: "/orders/appData" },
+      ],
+    },
+    { label: "Payments", icon: "/SidebarPaymentLogo.svg" , hasDropdown : false },
+    { label: "Chat", icon: "/SidebarChatsLogo.svg" , hasDropdown : false },
+    {
+      label: "Product",
+      icon: "/SidebarProductLogo.svg",
+      hasDropdown: true,
+      subRoutes: [
+        { name: "Product List", path: "/products/productlist" },
+        { name: "Add Product", path: "/products/addproduct" },
+      ],
+    },
+    { label: "Operations", icon: "/SidebarOperationsLogo.svg", hasDropdown: false },
     { 
       label: "Vendor Management", 
       icon: "/SidebarVendorLogo.svg", 
@@ -75,12 +91,20 @@ const Sidebar = () => {
                 )}
               </div>
 
-              {expandedIndex === index && (
-                <div className="ml-10 mt-2 text-sm text-gray-600">
-                  {/* Placeholder for dropdown content */}
-                  <p>Dropdown content for {item.label}</p>
-                </div>
-              )}
+              {expandedIndex === index && item.subRoutes && (
+  <ul className="ml-10 mt-2 space-y-2">
+    {item.subRoutes.map((sub, i) => (
+      <li
+        key={i}
+        className=" text-[#060B14] hover:text-[#0066FF] cursor-pointer"
+        onClick={() => router.push(sub.path)}
+      >
+        {sub.name}
+      </li>
+    ))}
+  </ul>
+)}
+
             </li>
           ))}
         </ul>
