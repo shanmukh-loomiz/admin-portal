@@ -4,20 +4,32 @@ import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const router = useRouter();
-  
   const mainItems = [
-    { label: "Dashboard", icon: "/SidebarDashboardLogo.svg", hasDropdown : false },
+    {
+      label: "Dashboard",
+      icon: "/SidebarDashboardLogo.svg",
+      hasDropdown: false
+    },
     {
       label: "Orders",
       icon: "/SidebarOrderTrackingLogo.svg",
       hasDropdown: true,
       subRoutes: [
-        { name: "Through Web", path: "/orders/websiteData" },
-        { name: "Through App", path: "/orders/appData" },
+        { name: "Accepted Orders", path: "/orders/accepted" },
+        { name: "Rejected Orders", path: "/orders/rejected" },
+        { name: "Pending Orders", path: "/orders/pending" },
       ],
     },
-    { label: "Payments", icon: "/SidebarPaymentLogo.svg" , hasDropdown : false },
-    { label: "Chat", icon: "/SidebarChatsLogo.svg" , hasDropdown : false },
+    {
+      label: "Payments",
+      icon: "/SidebarPaymentLogo.svg",
+      hasDropdown: false
+    },
+    {
+      label: "Chat",
+      icon: "/SidebarChatsLogo.svg",
+      hasDropdown: false
+    },
     {
       label: "Product",
       icon: "/SidebarProductLogo.svg",
@@ -27,12 +39,16 @@ const Sidebar = () => {
         { name: "Add Product", path: "/products/addproduct" },
       ],
     },
-    { label: "Operations", icon: "/SidebarOperationsLogo.svg", hasDropdown: false },
-    { 
-      label: "Vendor Management", 
-      icon: "/SidebarVendorLogo.svg", 
-      route: "/vendors", 
-      hasDropdown: false 
+    {
+      label: "Operations",
+      icon: "/SidebarOperationsLogo.svg",
+      hasDropdown: false
+    },
+    {
+      label: "Vendor Management",
+      icon: "/SidebarVendorLogo.svg",
+      route: "/vendors",
+      hasDropdown: false
     },
   ];
 
@@ -58,7 +74,7 @@ const Sidebar = () => {
         <ul className="list-none px-3 m-0">
           {mainItems.map((item, index) => (
             <li key={index} className="mb-2">
-              <div 
+              <div
                 className="flex justify-between items-center py-3 px-2 text-[18px] text-[#060B14] font-[Sregular] hover:bg-[#dbe9ff] rounded-md transition cursor-pointer"
                 onClick={() => handleItemClick(item, index)}
               >
@@ -70,7 +86,6 @@ const Sidebar = () => {
                   />
                   <span>{item.label}</span>
                 </div>
-
                 {/* Only show dropdown button for items that have dropdowns */}
                 {item.hasDropdown !== false && (
                   <button
@@ -90,21 +105,20 @@ const Sidebar = () => {
                   </button>
                 )}
               </div>
-
               {expandedIndex === index && item.subRoutes && (
-  <ul className="ml-10 mt-2 space-y-2">
-    {item.subRoutes.map((sub, i) => (
-      <li
-        key={i}
-        className=" text-[#060B14] hover:text-[#0066FF] cursor-pointer"
-        onClick={() => router.push(sub.path)}
-      >
-        {sub.name}
-      </li>
-    ))}
-  </ul>
-)}
-
+                <ul className="mt-1 pl-8 border-l-2 border-blue-300 ml-4">
+                  {item.subRoutes.map((sub, i) => (
+                    <li
+                      key={i}
+                      className="py-2 pl-3 mb-1 relative text-[15px] text-[#5A6474] hover:text-[#0066FF] cursor-pointer transition-colors hover:bg-[#e8f0fd] rounded-md"
+                      onClick={() => router.push(sub.path)}
+                    >
+                      <div className="absolute left-[-14px] top-1/2 w-3 h-[2px] bg-blue-300"></div>
+                      {sub.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
@@ -113,4 +127,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default Sidebar

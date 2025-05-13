@@ -1,18 +1,14 @@
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { useRouter } from 'next/navigation';
 
-const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0, accepted: 0, rejected: 0 } }) => {
+const AcceptedRFQs = ({ initialQuotes = [], initialStats = { total: 0, pending: 0, accepted: 0, rejected: 0 } }) => {
   const router = useRouter();
-  const [showPopup, setShowPopup] = useState(false);
-  const [popupType, setPopupType] = useState('');
-  const [pendingQuotes, setPendingQuotes] = useState(initialQuotes);
-  const [selectedQuote, setSelectedQuote] = useState(null);
+  const [acceptedQuotes, setAcceptedQuotes] = useState(initialQuotes);
   const [stats, setStats] = useState(initialStats);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [notification, setNotification] = useState({ show: false, message: '', type: '' });
-  const [viewingFiles, setViewingFiles] = useState(null);
+  const [expandedQuoteId, setExpandedQuoteId] = useState(null);
 
   // Show notification function
   const showNotification = (message, type = 'success') => {
@@ -24,67 +20,9 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     }, 3000);
   };
 
-  const handleActionClick = (type, quote) => {
-    setPopupType(type);
-    setSelectedQuote(quote);
-    setShowPopup(true);
-  };
-
-  const handleUpdateStatus = async (quoteId, newStatus, rejectionReason = null) => {
-    try {
-      setIsSubmitting(true);
-      
-      // Determine the correct API endpoint based on the action
-      const apiEndpoint = 
-        newStatus === "Accepted" 
-          ? `/api/orders/accept` 
-          : `/api/orders/reject`;
-      
-      // Prepare the request body
-      const requestBody = { 
-        quoteId,
-        ...(rejectionReason && { rejectionReason })
-      };
-      
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Failed to ${newStatus.toLowerCase()} quote`);
-      }
-
-      // Update the local state to reflect the change
-      setPendingQuotes(pendingQuotes.filter(quote => quote._id !== quoteId));
-      
-      // Update stats locally as well to avoid another fetch
-      setStats(prevStats => ({
-        ...prevStats,
-        pending: prevStats.pending - 1,
-        ...(newStatus === 'Accepted' ? { accepted: prevStats.accepted + 1 } : {}),
-        ...(newStatus === 'Rejected' ? { rejected: prevStats.rejected + 1 } : {})
-      }));
-      
-      // Close the popup
-      setShowPopup(false);
-      
-      // Show success notification
-      showNotification(
-        newStatus === 'Accepted' 
-          ? 'RFQ successfully accepted!' 
-          : 'RFQ has been rejected'
-      );
-      
-    } catch (error) {
-      console.error(`Error ${newStatus.toLowerCase()}ing quote:`, error);
-      showNotification(`Failed to ${newStatus.toLowerCase()} quote. Please try again.`, 'error');
-    } finally {
-      setIsSubmitting(false);
-    }
+  // Function to navigate to production tracking page
+  const navigateToTracking = (quoteId) => {
+    router.push(`/track/${quoteId}`);
   };
 
   // Function to handle back button click
@@ -120,7 +58,7 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     }
     
     if (quote.productImagesFiles && quote.productImagesFiles.length > 0) {
-      quote.productImagesFiles.forEach((url, index) => {
+      quote.productImagesFiles.forEach((url) => {
         files.push({ 
           name: getFileName(url),
           type: 'Product Image', 
@@ -131,7 +69,7 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     }
     
     if (quote.colorSwatchFiles && quote.colorSwatchFiles.length > 0) {
-      quote.colorSwatchFiles.forEach((url, index) => {
+      quote.colorSwatchFiles.forEach((url) => {
         files.push({ 
           name: getFileName(url),
           type: 'Color Swatch', 
@@ -142,7 +80,7 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     }
     
     if (quote.fabricFiles && quote.fabricFiles.length > 0) {
-      quote.fabricFiles.forEach((url, index) => {
+      quote.fabricFiles.forEach((url) => {
         files.push({ 
           name: getFileName(url),
           type: 'Fabric', 
@@ -153,7 +91,7 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     }
     
     if (quote.miscellaneousFiles && quote.miscellaneousFiles.length > 0) {
-      quote.miscellaneousFiles.forEach((url, index) => {
+      quote.miscellaneousFiles.forEach((url) => {
         files.push({ 
           name: getFileName(url),
           type: 'Miscellaneous', 
@@ -165,9 +103,6 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     
     return files;
   };
-  
-  // State to track expanded RFQ cards
-  const [expandedQuoteId, setExpandedQuoteId] = useState(null);
   
   // Toggle expanded state for a quote
   const toggleQuoteExpand = (quoteId) => {
@@ -206,7 +141,7 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
           </button>
-          <h2 className="text-2xl font-semibold text-gray-800">RFQ Received</h2>
+          <h2 className="text-2xl font-semibold text-gray-800">Accepted RFQs</h2>
         </div>
 
         <div className="flex gap-5">
@@ -230,38 +165,33 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
       </div>
 
       {/* RFQ Cards */}
-      {pendingQuotes.length === 0 ? (
+      {acceptedQuotes.length === 0 ? (
         <div className="bg-white p-8 rounded-lg shadow-sm mt-6 text-center flex flex-col items-center justify-center min-h-[200px]">
           <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
             <line x1="9" y1="9" x2="15" y2="15"></line>
             <line x1="15" y1="9" x2="9" y2="15"></line>
           </svg>
-          <p className="text-gray-500 mt-4 text-lg">No pending RFQs found</p>
-          <p className="text-gray-400 text-sm mt-2">All your pending requests for quotes will appear here</p>
+          <p className="text-gray-500 mt-4 text-lg">No accepted RFQs found</p>
+          <p className="text-gray-400 text-sm mt-2">All your accepted requests for quotes will appear here</p>
         </div>
       ) : (
-        pendingQuotes.map((quote, idx) => {
+        acceptedQuotes.map((quote) => {
           const files = getAllFiles(quote);
           
           return (
             <div key={quote._id} className="bg-white p-7 rounded-lg shadow-sm mt-6 mb-6 transition-all duration-300 ease-in-out hover:shadow-md">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-semibold text-[#333333] text-lg">RFQ ID: <span className="text-[#194185]">{quote._id.substring(0, 8)}</span></h3>
-                <div className="flex gap-4">
-                  <button
-                    className="bg-[#194185] text-white px-6 py-2 rounded-full hover:bg-[#0f2d60] transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#194185]"
-                    onClick={() => handleActionClick('Accept', quote)}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="border border-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-100 transition-colors text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-                    onClick={() => handleActionClick('Reject', quote)}
-                  >
-                    Reject
-                  </button>
-                </div>
+                <button
+                  className="bg-[#194185] text-white px-6 py-2 rounded-full hover:bg-[#0f2d60] transition-colors text-sm font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#194185]"
+                  onClick={() => navigateToTracking(quote._id)}
+                >
+                  <span>Production Tracking</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </button>
               </div>
 
               <div className="text-[#194185] font-semibold text-[24px] mb-5">
@@ -302,7 +232,7 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
                 }
               </button>
               
-              {/* Documents section - Only show in collapsed view - Using RejectedRFQs style */}
+              {/* Documents section - Only show in collapsed view */}
               {expandedQuoteId !== quote._id && (
                 <div className="mt-6">
                   <p className="font-medium text-sm mb-4 text-[#333333]">Documents uploaded</p>
@@ -370,6 +300,17 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
                         <p className="mt-2 text-gray-700">{quote.orderNotes}</p>
                       </div>
                     )}
+                    
+                    {/* Production status information */}
+                    <div className="col-span-2">
+                      <h5 className="font-medium text-[#194185] border-b border-gray-100 pb-2 mb-3">Production Status</h5>
+                      <div className="bg-green-50 p-4 rounded-md border border-green-100">
+                        <p className="text-green-700 font-medium">Order accepted and ready for production</p>
+                        <p className="text-sm text-gray-700 mt-1">
+                          Click "Production Tracking" to view detailed progress of this order
+                        </p>
+                      </div>
+                    </div>
                   </div>
                   
                   <h5 className="font-medium text-[#194185] mb-4 border-b border-gray-100 pb-2">All Documents</h5>
@@ -408,103 +349,8 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
           );
         })
       )}
-
-      {/* Popup for Accept/Reject */}
-      {showPopup && selectedQuote && (
-        <div className="fixed inset-0 z-50 flex justify-center items-center backdrop-blur-sm bg-white/30">
-          <div className="bg-white rounded-lg p-6 shadow-lg w-[740px]">
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-md font-semibold text-gray-700">
-                {popupType === 'Reject' ? 'Mention the reason for rejection' : 'Start Talking to the brand'}
-              </h3>
-              <button onClick={() => setShowPopup(false)} className="text-gray-500 hover:text-gray-700 text-lg">
-                ✕
-              </button>
-            </div>
-
-            {popupType === 'Reject' ? (
-              <>
-                <textarea
-                  id="rejectionReason"
-                  placeholder="Enter your comments here"
-                  className="w-full p-4 border border-gray-300 rounded-md text-sm mb-6 resize-none h-28 focus:outline-none focus:ring-2 focus:ring-[#194185]"
-                  required
-                />
-                <div className="flex justify-between">
-                  <button 
-                    className="border border-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-100 transition-colors text-sm font-medium"
-                    onClick={() => setShowPopup(false)}
-                    disabled={isSubmitting}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    className={`bg-[#0E1C2F] text-white px-6 py-2 rounded-full flex items-center gap-2 text-sm font-medium ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#162942] transition-colors'}`}
-                    onClick={() => {
-                      if (!isSubmitting) {
-                        const reason = document.getElementById('rejectionReason').value;
-                        
-                        if (!reason.trim()) {
-                          alert('Please provide a reason for rejection');
-                          return;
-                        }
-                        
-                        handleUpdateStatus(selectedQuote._id, "Rejected", reason);
-                      }
-                    }}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Rejecting...' : 'Confirm Rejection'} 
-                    {!isSubmitting && <img src="/SendIcon.svg" alt="Send" />}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <div className="text-sm text-left space-y-3 text-gray-700 mb-6">
-                  <div>
-                    <span className="text-[#194185] font-medium">RFQ Details</span>
-                      <li><span className="font-medium text-gray-600">Price:</span> ${selectedQuote.targetPrice}/pc</li>
-                      <li><span className="font-medium text-gray-600">Quantity:</span> {selectedQuote.quantity} pcs</li>
-                      <li><span className="font-medium text-gray-600">Lead Time:</span> {selectedQuote.leadTime} days</li>
-                      <li><span className="font-medium text-gray-600">Sample Required:</span> {selectedQuote.orderSample ? "Yes" : "No"}</li>
-                      <li><span className="font-medium text-gray-600">Fabric:</span> {selectedQuote.fabricComposition} - {selectedQuote.gsm}</li>
-                  </div>
-                  <div className="mt-4">
-                    <span className="text-[#194185] font-medium border-b border-gray-100 pb-2 block mb-2">Shipping Information</span>
-                    <p className="text-gray-700 mt-2"><span className="font-medium text-gray-600">Address:</span> {selectedQuote.shippingAddress}</p>
-                    {selectedQuote.orderNotes && (
-                      <>
-                        <span className="text-[#194185] font-medium border-b border-gray-100 pb-2 block mb-2">Notes</span>
-                        <p className="text-gray-700 mt-2">{selectedQuote.orderNotes}</p>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <p className="text-sm mb-4">By accepting this RFQ, you agree to proceed with the quote and will contact the customer.</p>
-                <div className="flex gap-4 mt-6 justify-between">
-                  <button 
-                    className="border border-gray-300 text-gray-700 px-6 py-2 rounded-full hover:bg-gray-100 transition-colors"
-                    onClick={() => setShowPopup(false)}
-                    disabled={isSubmitting}
-                  >
-                    Cancel
-                  </button>
-                  <button 
-                    className={`bg-[#0E1C2F] text-white px-6 py-2 rounded-full flex items-center gap-2 ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#162942] transition-colors'}`}
-                    onClick={() => !isSubmitting && handleUpdateStatus(selectedQuote._id, "Accepted")}
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? 'Processing...' : 'Confirm Acceptance'}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
 
-export default RFQReceived;
+export default AcceptedRFQs;
