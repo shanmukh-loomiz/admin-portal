@@ -58,6 +58,11 @@ body {
   src: local("Sregular"),url('../app/Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Regular.woff') format('woff'); /* Update the file path accordingly */
 }
 
+@font-face {
+  font-family: 'Satoshi';
+  src: local("Satoshi"), url('../app/Fonts/Satoshi_Complete/Fonts/WEB/fonts/Satoshi-Regular.woff') format('woff');
+
+}
 
 body{
   background-color: #F9F7F7;

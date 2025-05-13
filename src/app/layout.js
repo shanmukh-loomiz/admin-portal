@@ -11,6 +11,7 @@ import WebsiteData from "./components/WebsiteData";
 import AppData from "./components/AppData";
 import Queries from "./components/Queries";
 import VerifiedBrands from "./components/VerifiedBrands";
+import ProductList from "./components/ProductList";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,19 +40,20 @@ export default function RootLayout({ children }) {
           <main className="w-full">
             {children}
             {/* <VendorManagement /> */}
-<BrandVerification />
-<AddProduct /> 
+            {/* <BrandVerification /> */}
+            {/* <ProductList /> */}
+            {/* <AddProduct /> */}
 
-{/* For Web  */}
- <WebsiteData />
-<RFQReceived /> 
+            {/* For Web  */}
+            {/* <WebsiteData /> */}
+            {/* <RFQReceived /> */}
 
 
-  {/* For App */}
-  <AppData />
-  <Queries /> 
+            {/* For App */}
+            {/* <AppData /> */}
+            {/* <Queries /> */}
 
-  <VerifiedBrands />
+            {/* <VerifiedBrands /> */}
           </main>
         </div>
       </body>
