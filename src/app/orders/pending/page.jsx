@@ -40,7 +40,7 @@ export default async function PendingOrders() {
   const { quotes, stats } = await fetchPendingQuotes();
   
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className='ml-[350px]'>Loading...</div>}>
       <RFQReceived initialQuotes={quotes} initialStats={stats} />
     </Suspense>
   );

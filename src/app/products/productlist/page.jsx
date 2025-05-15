@@ -26,7 +26,7 @@ export default function ProductList() {
         </div>
         <button
           onClick={() => router.push('/products/addproduct')}
-          className="bg-[#1570EF] text-white px-12 py-4 rounded-full font-medium font-[Satoshi] cursor-pointer"
+          className="bg-[#344054] text-white px-12 py-4 rounded-full font-medium font-[Satoshi] cursor-pointer"
         >
           +   Add new product
         </button>
