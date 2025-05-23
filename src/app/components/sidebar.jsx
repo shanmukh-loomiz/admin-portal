@@ -106,14 +106,14 @@ const Sidebar = () => {
                 )}
               </div>
               {expandedIndex === index && item.subRoutes && (
-                <ul className="mt-1 pl-8 border-l-2 border-blue-300 ml-4">
+                <ul className="mt-1 pl-8 border-l-2 border-[#5A6474] ml-4">
                   {item.subRoutes.map((sub, i) => (
                     <li
                       key={i}
                       className="py-2 pl-3 mb-1 relative text-[15px] text-[#5A6474] hover:text-[#0066FF] cursor-pointer transition-colors hover:bg-[#e8f0fd] rounded-md"
                       onClick={() => router.push(sub.path)}
                     >
-                      <div className="absolute left-[-14px] top-1/2 w-3 h-[2px] bg-blue-300"></div>
+                      <div className="absolute left-[-14px] top-1/2 w-3 h-[2px] bg-[#5A6474]"></div>
                       {sub.name}
                     </li>
                   ))}
