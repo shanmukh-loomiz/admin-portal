@@ -1,68 +1,93 @@
-"use client";
 import React from "react";
 
 export default function Home() {
   return (
-    <div className="ml-[350px] p-8 max-w-4xl">
-      <div className="bg-white rounded-lg shadow-md p-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Admin Portal</h1>
-        
-        <div className="bg-blue-50 border-l-4 border-blue-500 p-4 mb-8">
-          <div className="flex items-center">
-            <svg className="w-6 h-6 text-blue-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <p className="text-blue-700 font-medium">System Status Update</p>
+    <div className="ml-[290px] p-8 min-h-[calc(100vh-75px)] bg-white mb-[50px] font-[Satoshi]">
+      {/* Main Dashboard */}{/* Header */}
+          <div className="mb-6">
+            <h2 className="text-2xl font-semibold">Dashboard</h2>
+            <p className="text-gray-500 mt-1">Overview</p>
           </div>
-        </div>
-        
-        <div className="mb-8">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4">Module Status</h2>
+      <main className="flex gap-6">
+        {/* LEFT HALF */}
+        <div className="w-1/2">
           
-          <div className="grid gap-4">
-            {/* Vendor Management - Ready */}
-            <div className="border border-green-200 bg-green-50 rounded-md p-4 flex items-center">
-              <div className="rounded-full bg-green-500 w-10 h-10 flex items-center justify-center mr-4">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-800">Vendor Management</h3>
-                <p className="text-green-700">Ready to use</p>
-                <p className="text-sm text-gray-600 mt-1">
-                  Click on "Vendor Management" in the sidebar to access this module.
-                </p>
-              </div>
-            </div>
-            
-            {/* Other modules - Under Development */}
-            {["Dashboard", "Orders", "Payments", "Chat", "Product", "Operations"].map((module) => (
-              <div key={module} className="border border-gray-200 bg-gray-50 rounded-md p-4 flex items-center">
-                <div className="rounded-full bg-gray-400 w-10 h-10 flex items-center justify-center mr-4">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
+
+          {/* Stats Grid: 2x2 */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {[
+              { title: "Total", value: "1,234", change: "+12%", icon: "/DashboardTotalsIcon.svg" },
+              { title: "Pending Queries", value: "56", change: "-3%", icon: "/DashboardQueries.svg" },
+              { title: "Pending RFQs", value: "89", change: "+65%", icon: "/DashboardRFQs.svg" },
+              { title: "Orders Confirmed", value: "95", change: "+22%", icon: "/DashboradConfirmed.svg" },
+            ].map((item, index) => (
+              <div key={index} className="bg-white p-4 rounded-lg shadow-sm border">
+                <div className="flex justify-between text-gray-600 text-sm mb-1">
+                  <span>{item.title}</span>
+                  <img src={item.icon} alt={item.title} />
                 </div>
-                <div>
-                  <h3 className="font-bold text-gray-800">{module}</h3>
-                  <p className="text-gray-600">Under development</p>
-                  <p className="text-sm text-gray-500 mt-1">
-                    This module is coming soon. Stay tuned for updates.
-                  </p>
-                </div>
+                <div className="text-[28px] font-semibold text-[#1b2a41]">{item.value}</div>
+                <div className="text-sm text-blue-500">{item.change} from last month</div>
               </div>
             ))}
           </div>
+
+          {/* Chat Section Placeholder */}
+          <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <h3 className="mb-4 font-medium text-gray-600">Chat Section</h3>
+            <div className="h-40 bg-gray-100 flex items-center justify-center text-gray-400">
+              Chat content goes here
+            </div>
+          </div>
         </div>
-        
-        <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-          <h3 className="font-medium text-yellow-800 mb-2">Need assistance?</h3>
-          <p className="text-gray-700">
-            If you have any questions or need help navigating the portal, please contact the admin team.
-          </p>
+
+        {/* RIGHT HALF */}
+        <div className="w-1/2 flex flex-col gap-6">
+          {/* Recent Requests */}
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="text-gray-700 font-medium">Recent requests</h4>
+              <a className="text-blue-500 text-sm cursor-pointer">View all</a>
+            </div>
+            <ul className="space-y-4 text-sm">
+              {[1, 2, 3, 4].map((_, idx) => (
+                <li key={idx} className="flex justify-between text-gray-600">
+                  <div className="flex items-center space-x-2">
+                    <img src="RecentRequestIcon.svg" />
+                    <div>
+                      <p>Order #1234</p>
+                      <p className="text-xs text-gray-400">app · $156</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">2h ago</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Active Products */}
+          <div className="bg-white p-4 rounded-lg shadow-sm border">
+            <div className="flex justify-between items-center mb-4">
+              <h4 className="text-gray-700 font-medium">Active Products</h4>
+              <a className="text-blue-500 text-sm cursor-pointer">View all</a>
+            </div>
+            <ul className="space-y-4">
+              {[1, 2, 3].map((_, idx) => (
+                <li key={idx} className="flex justify-between items-center">
+                  <div className="flex items-center space-x-2">
+                    <img src="/ActiveProductIcon.svg" />
+                    <div className="text-sm">
+                      <p>Product ID</p>
+                      <p className="text-xs text-gray-400">Product name</p>
+                    </div>
+                  </div>
+                  <p className="text-blue-500 text-sm">$4-9/pc</p>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }

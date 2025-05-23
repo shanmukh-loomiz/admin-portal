@@ -3,9 +3,7 @@ import "./globals.css";
 
 import Navbar from "./components/navbar";
 import Sidebar from "./components/sidebar";
-import SamplesHome from "@/samples/samplesHome";
 import OrderTrackingStepsHome from "./components/OderTrackingStepsHome";
-// import VendorManagement from "./components/VendorMangement";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
