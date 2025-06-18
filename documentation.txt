@@ -1,0 +1,218 @@
+# Admin Portal Documentation
+
+## Overview
+The Admin Portal is a web application built with Next.js (React 19), designed to streamline the process for administrators to manage orders, products, vendors, and other administrative tasks. The portal features a modern, responsive UI, robust backend using MongoDB via Mongoose, and a comprehensive set of APIs for data management.
+
+## Table of Contents
+1. Project Structure
+2. Setup & Installation
+3. Core Features
+4. Key Components
+5. Data Models
+6. Authentication Flow
+7. Styling & Fonts
+8. Development & Deployment
+9. Dependencies
+10. Extending the Project
+11. APIs & Components
+
+## Project Structure
+```
+AdminPortal/
+├── src/
+│   ├── app/
+│   │   ├── components/         # Reusable UI components (navbar, sidebar, etc.)
+│   │   ├── api/                # API endpoints for data management
+│   │   ├── layout.js           # Global layout and navigation logic
+│   │   └── globals.css         # Global styles
+│   ├── models/                 # Mongoose data models (Order, Product, Vendor)
+│   └── lib/                    # Utility libraries (MongoDB, etc.)
+├── public/                     # Static assets (logos, icons, etc.)
+├── package.json                # Project dependencies and scripts
+├── README.md                   # Project overview and setup
+└── ...                         # Config files (eslint, postcss, etc.)
+```
+
+## Setup & Installation
+1. Clone the repository and install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+2. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+3. Open http://localhost:3000 in your browser.
+
+## Core Features
+- Order Management: View and manage orders, including accepted, rejected, and pending orders.
+- Product Management: Add, update, and delete products.
+- Vendor Management: Manage vendors, including approval and rejection processes.
+- Responsive UI: Works seamlessly on desktop and mobile devices.
+- File Uploads: Support for uploading files (images, documents, etc.).
+
+## Key Components
+1. Layout & Navigation
+   - layout.js: Handles global layout, responsive sidebar, and navbar.
+   - navbar.jsx: Top navigation bar with quick actions.
+   - sidebar.jsx: Main navigation menu with links to dashboard sections.
+
+2. Order Management
+   - Orders: Overview of orders with subpages for accepted, rejected, and pending orders.
+   - Order Tracking: Track order status and details.
+
+3. Product Management
+   - Product List: View all products.
+   - Add Product: UI for adding a new product.
+
+4. Vendor Management
+   - Vendor List: View all vendors.
+   - Vendor Approval: Approve or reject vendors.
+
+## Data Models
+1. Order
+   - Represents a placed order, linked to a quote.
+   - Tracks status, production steps, manufacturer info, and design details.
+   - Fields: orderNumber, status, loomizTeam, manufacturer, productionSteps, etc.
+
+2. Product
+   - Represents a product in the system.
+   - Includes details like name, price, and description.
+   - Fields: name, price, description, etc.
+
+3. Vendor
+   - Represents a vendor in the system.
+   - Includes details like name, contact, and status.
+   - Fields: name, contact, status, etc.
+
+## Authentication Flow
+- Sign In: User enters credentials → On success, logged in.
+
+## Styling & Fonts
+- Uses Tailwind CSS for utility-first styling.
+- Custom fonts loaded via next/font (Geist, Geist Mono).
+- Responsive design for mobile and desktop.
+
+## Development & Deployment
+- Development: Use npm run dev or yarn dev.
+- Linting: npm run lint
+- Build: npm run build
+- Deployment: Can be deployed on Vercel or any Node.js-compatible host.
+
+## Dependencies
+- Frontend: next, react, react-dom, lucide-react
+- Backend/Data: mongoose, cloudinary, uuid
+- Styling: tailwindcss, postcss, autoprefixer
+- Utilities: axios
+
+## Extending the Project
+- Add new pages: Create a new folder in src/app/ and add a page.jsx.
+- Add new models: Define a new schema in src/models/.
+- Add new API routes: Use the src/app/api/ directory.
+- Customize UI: Edit or add components in src/app/components/.
+
+## APIs & Components
+
+### API Endpoints
+1. /api/orders/accepted-quotes
+   - GET: Retrieves a list of accepted order quotes.
+   - Response: JSON array of accepted order objects.
+
+2. /api/orders/rejected-quotes
+   - GET: Retrieves a list of rejected order quotes.
+   - Response: JSON array of rejected order objects.
+
+3. /api/orders/pending-quotes
+   - GET: Retrieves a list of pending order quotes.
+   - Response: JSON array of pending order objects.
+
+4. /api/orders/accept
+   - POST: Accepts an order.
+   - Request Body: JSON object containing order details.
+   - Response: JSON object with success message or error.
+
+5. /api/orders/reject
+   - POST: Rejects an order.
+   - Request Body: JSON object containing order details.
+   - Response: JSON object with success message or error.
+
+6. /api/products/get-all-products
+   - GET: Retrieves a list of all products.
+   - Response: JSON array of product objects.
+
+7. /api/products/get-product/[id]
+   - GET: Retrieves a single product by its ID.
+   - Response: JSON object representing the product.
+
+8. /api/products/save-product
+   - POST: Saves a new product.
+   - Request Body: JSON object containing product details.
+   - Response: JSON object with success message or error.
+
+9. /api/products/update-product/[id]
+   - PUT: Updates an existing product by its ID.
+   - Request Body: JSON object containing updated product details.
+   - Response: JSON object with success message or error.
+
+10. /api/products/delete-product/[id]
+    - DELETE: Deletes a product by its ID.
+    - Response: JSON object with success message or error.
+
+11. /api/vendors
+    - GET/POST: Manages vendors (list, add, etc).
+    - Response: JSON array of vendor objects or success message.
+
+12. /api/vendors/approve
+    - POST: Approves a vendor.
+    - Request Body: JSON object containing vendor details.
+    - Response: JSON object with success message or error.
+
+13. /api/vendors/reject
+    - POST: Rejects a vendor.
+    - Request Body: JSON object containing vendor details.
+    - Response: JSON object with success message or error.
+
+14. /api/vendors/under-review
+    - POST: Marks a vendor as under review.
+    - Request Body: JSON object containing vendor details.
+    - Response: JSON object with success message or error.
+
+15. /api/vendors/[id]
+    - GET/PUT/DELETE: Gets, updates, or deletes a vendor by its ID.
+    - Response: JSON object representing the vendor or success message.
+
+### Components
+1. Navbar (navbar.jsx)
+   - Displays the top navigation bar with quick actions.
+   - Responsive design with mobile-specific menu toggle.
+   - Usage: Import and include in layout.js.
+
+2. Sidebar (sidebar.jsx)
+   - Provides the main navigation menu with links to dashboard sections.
+   - Handles active state highlighting and mobile responsiveness.
+   - Usage: Import and include in layout.js.
+
+3. Order Management (Orders)
+   - Overview of orders with subpages for accepted, rejected, and pending orders.
+   - Usage: Access via /orders route.
+
+4. Product Management (Product)
+   - Product list and add product UI.
+   - Usage: Access via /products route.
+
+5. Vendor Management (Vendors)
+   - Vendor list and approval UI.
+   - Usage: Access via /vendors route.
+
+## Additional Notes
+- The project is structured for scalability, with clear separation of concerns.
+- All forms and popups are designed for accessibility and mobile usability.
+- The backend is ready for integration with real authentication and file storage services.
+
+For more details, refer to the codebase and comments within each file. If you need API documentation or a deeper dive into a specific module, let me know! 

@@ -45,6 +45,11 @@ const QuoteSchema = new mongoose.Schema({
     default: "Pending"
   },
 
+  comments:{
+    type: String,
+    default:"Sorry,We can not process your order."
+  },  
+
   // File URLs stored after upload to Cloudinary
   techpackFile: {
     type: String

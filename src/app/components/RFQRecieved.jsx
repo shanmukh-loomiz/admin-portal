@@ -30,62 +30,62 @@ const RFQReceived = ({ initialQuotes = [], initialStats = { total: 0, pending: 0
     setShowPopup(true);
   };
 
-  const handleUpdateStatus = async (quoteId, newStatus, rejectionReason = null) => {
-    try {
-      setIsSubmitting(true);
-      
-      // Determine the correct API endpoint based on the action
-      const apiEndpoint = 
-        newStatus === "Accepted" 
-          ? `/api/orders/accept` 
-          : `/api/orders/reject`;
-      
-      // Prepare the request body
-      const requestBody = { 
-        quoteId,
-        ...(rejectionReason && { rejectionReason })
-      };
-      
-      const response = await fetch(apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-      });
+ const handleUpdateStatus = async (quoteId, newStatus, comments = null) => {
+  try {
+    setIsSubmitting(true);
+    
+    // Determine the correct API endpoint based on the action
+    const apiEndpoint = 
+      newStatus === "Accepted" 
+        ? `/api/orders/accept` 
+        : `/api/orders/reject`;
+    
+    // Prepare the request body - changed rejectionReason to comments
+    const requestBody = { 
+      quoteId,
+      ...(comments && { comments })
+    };
+    
+    const response = await fetch(apiEndpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(requestBody),
+    });
 
-      if (!response.ok) {
-        throw new Error(`Failed to ${newStatus.toLowerCase()} quote`);
-      }
-
-      // Update the local state to reflect the change
-      setPendingQuotes(pendingQuotes.filter(quote => quote._id !== quoteId));
-      
-      // Update stats locally as well to avoid another fetch
-      setStats(prevStats => ({
-        ...prevStats,
-        pending: prevStats.pending - 1,
-        ...(newStatus === 'Accepted' ? { accepted: prevStats.accepted + 1 } : {}),
-        ...(newStatus === 'Rejected' ? { rejected: prevStats.rejected + 1 } : {})
-      }));
-      
-      // Close the popup
-      setShowPopup(false);
-      
-      // Show success notification
-      showNotification(
-        newStatus === 'Accepted' 
-          ? 'RFQ successfully accepted!' 
-          : 'RFQ has been rejected'
-      );
-      
-    } catch (error) {
-      console.error(`Error ${newStatus.toLowerCase()}ing quote:`, error);
-      showNotification(`Failed to ${newStatus.toLowerCase()} quote. Please try again.`, 'error');
-    } finally {
-      setIsSubmitting(false);
+    if (!response.ok) {
+      throw new Error(`Failed to ${newStatus.toLowerCase()} quote`);
     }
-  };
+
+    // Update the local state to reflect the change
+    setPendingQuotes(pendingQuotes.filter(quote => quote._id !== quoteId));
+    
+    // Update stats locally as well to avoid another fetch
+    setStats(prevStats => ({
+      ...prevStats,
+      pending: prevStats.pending - 1,
+      ...(newStatus === 'Accepted' ? { accepted: prevStats.accepted + 1 } : {}),
+      ...(newStatus === 'Rejected' ? { rejected: prevStats.rejected + 1 } : {})
+    }));
+    
+    // Close the popup
+    setShowPopup(false);
+    
+    // Show success notification
+    showNotification(
+      newStatus === 'Accepted' 
+        ? 'RFQ successfully accepted!' 
+        : 'RFQ has been rejected'
+    );
+    
+  } catch (error) {
+    console.error(`Error ${newStatus.toLowerCase()}ing quote:`, error);
+    showNotification(`Failed to ${newStatus.toLowerCase()} quote. Please try again.`, 'error');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Function to handle back button click
   const handleBackClick = () => {

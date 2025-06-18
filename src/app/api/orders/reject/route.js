@@ -8,7 +8,7 @@ export async function POST(request) {
     await dbConnect();
     
     const data = await request.json();
-    const { quoteId, rejectionReason } = data;
+    const { quoteId, comments } = data; // Changed from rejectionReason to comments
     
     if (!quoteId) {
       return NextResponse.json(
@@ -17,19 +17,19 @@ export async function POST(request) {
       );
     }
     
-    if (!rejectionReason || !rejectionReason.trim()) {
+    if (!comments || !comments.trim()) {
       return NextResponse.json(
-        { success: false, error: 'Rejection reason is required' },
+        { success: false, error: 'Rejection comments are required' }, // Updated error message
         { status: 400 }
       );
     }
     
-    // Find and update the quote status to "Rejected" with the reason
+    // Find and update the quote status to "Rejected" with the comments
     const updatedQuote = await Quote.findByIdAndUpdate(
       quoteId,
       { 
         status: "Rejected",
-        rejectionReason: rejectionReason.trim()
+        comments: comments.trim() // Changed from rejectionReason to comments
       },
       { new: true, runValidators: true }
     );
@@ -42,15 +42,15 @@ export async function POST(request) {
     }
     
     // You could also perform additional operations here,
-    // such as sending notification emails, logging rejection reasons, etc.
+    // such as sending notification emails, logging rejection comments, etc.
     
     return NextResponse.json({ 
-      success: true, 
+      success: true,
       message: 'Quote successfully rejected',
       data: {
         _id: updatedQuote._id.toString(),
         status: updatedQuote.status,
-        rejectionReason: updatedQuote.rejectionReason
+        comments: updatedQuote.comments // Changed from rejectionReason to comments
       }
     });
   } catch (error) {
