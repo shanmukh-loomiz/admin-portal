@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import ProductionTrackingSection from './production-tracking/ProductTracking'
+import ProductionTrackingSection from './order-tracking/ProductionTracking'
 
 const OrderTrackingStepsHome = ({ orderData }) => {
 
