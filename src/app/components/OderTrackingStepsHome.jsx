@@ -127,8 +127,6 @@ const [productionSteps, setProductionSteps] = useState({
   };
 
   const confirmUpdateStatus = async () => {
-  console.log(steps)
-
  setProductionSteps({
   cutting: { date: '', comment: '' },
   stitching: { date: '', comment: '' },
