@@ -1,7 +1,32 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import ProductionTrackingSection from './production-tracking/ProductTracking'
 
 const OrderTrackingStepsHome = ({ orderData }) => {
+
+const [productionSteps, setProductionSteps] = useState({
+  cutting: { date: '', comment: '' },
+  stitching: { date: '', comment: '' },
+  washing: { date: '', comment: '' },
+  finishing: { date: '', comment: '' },
+});
+
+  
+ const steps = ["cutting", "stitching", "washing", "finishing"].map((step) => ({
+  name: step.charAt(0).toUpperCase() + step.slice(1),
+  date: productionSteps[step].date,
+  setDate: (date) =>
+    setProductionSteps((prev) => ({
+      ...prev,
+      [step]: { ...prev[step], date },
+    })),
+  comment: productionSteps[step].comment,
+  setComment: (comment) =>
+    setProductionSteps((prev) => ({
+      ...prev,
+      [step]: { ...prev[step], comment },
+    })),
+}));
   const trackingSteps = [
     "Sample Confirmation",
     "Fabric Inhoused",
@@ -102,6 +127,14 @@ const OrderTrackingStepsHome = ({ orderData }) => {
   };
 
   const confirmUpdateStatus = async () => {
+  console.log(steps)
+
+ setProductionSteps({
+  cutting: { date: '', comment: '' },
+  stitching: { date: '', comment: '' },
+  washing: { date: '', comment: '' },
+  finishing: { date: '', comment: '' },
+  });
     const currentDate = new Date().toLocaleString("en-GB", {
       day: "2-digit",
       month: "short",
@@ -328,16 +361,17 @@ const OrderTrackingStepsHome = ({ orderData }) => {
               </div>
             </div>
           </div>
+          </div>
+      { selectedStep=="Production" &&     <ProductionTrackingSection steps={steps}/> }
           
-          <div className="flex items-end">
+          <div className="flex items-end mt-4" >
             <button
               onClick={handleUpdateClick}
               className="bg-[#194185] hover:bg-blue-800 text-white px-6 py-2 rounded-md text-sm font-medium w-full"
               disabled={isLoading}
             >
               {isLoading ? "Updating..." : "Update Status"}
-            </button>
-          </div>
+            </button>         
         </div>
       </div>
 
@@ -373,4 +407,3 @@ const OrderTrackingStepsHome = ({ orderData }) => {
 };
 
 export default OrderTrackingStepsHome;
-          
