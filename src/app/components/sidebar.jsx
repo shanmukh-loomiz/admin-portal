@@ -50,6 +50,12 @@ const Sidebar = () => {
       route: "/vendors",
       hasDropdown: false
     },
+        {
+      label: "Companies Management",
+      icon: "/SidebarVendorLogo.svg",
+      route: "/companies",
+      hasDropdown: false
+    },
   ];
 
   const [expandedIndex, setExpandedIndex] = useState(null);

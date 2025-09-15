@@ -183,6 +183,11 @@ const AcceptedRFQs = ({ initialQuotes = [], initialStats = { total: 0, pending: 
             <div key={quote._id} className="bg-white p-7 rounded-lg shadow-sm mt-6 mb-6 transition-all duration-300 ease-in-out hover:shadow-md">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="font-semibold text-[#333333] text-lg">RFQ ID: <span className="text-[#194185]">{quote._id.substring(0, 8)}</span></h3>
+                {quote?.fromCatalogue && (
+                    <span className="text-xs inline-block px-2 py-1 rounded-full bg-[#FFF8E6] text-[#8A5A00] border border-[#F3E2B8] font-semibold">
+                      From catalogue
+                    </span>
+                  )}
                 <button
                   className="bg-[#194185] text-white px-6 py-2 rounded-full hover:bg-[#0f2d60] transition-colors text-sm font-medium flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#194185]"
                   onClick={() => navigateToTracking(quote._id)}
@@ -192,6 +197,69 @@ const AcceptedRFQs = ({ initialQuotes = [], initialStats = { total: 0, pending: 
                     <path fillRule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
                   </svg>
                 </button>
+                {(() => {
+  const companyUid = quote?.uid;
+  if (!companyUid) {
+    return (
+      <button
+        className="border border-gray-300 text-gray-400 px-4 py-2 rounded-full text-sm font-medium cursor-not-allowed"
+        title="No company linked"
+        disabled
+      >
+        View company
+      </button>
+    );
+  }
+
+  return (
+    <button
+      onClick={async () => {
+        try {
+          // optional: show quick loading affordance
+          const win = window.open("", "_blank"); // open a blank tab immediately for UX
+          if (!win) {
+            alert("Popup blocked. Please allow popups for this site.");
+            return;
+          }
+          win.document.title = "Loading company…";
+
+          // fetch all companies (use your existing endpoint)
+          const res = await fetch("/api/companies", { headers: { Accept: "application/json" } });
+          if (!res.ok) {
+            win.close();
+            const txt = await res.text().catch(() => "Failed to fetch companies");
+            alert("Failed to load company list: " + txt);
+            return;
+          }
+          const payload = await res.json().catch(() => null);
+          if (!payload || !payload.success || !Array.isArray(payload.data)) {
+            win.close();
+            alert("Unexpected response from companies API.");
+            return;
+          }
+
+          // find company by uid
+          const company = payload.data.find(c => String(c.uid) === String(companyUid));
+          if (!company) {
+            win.close();
+            alert("Company not found for uid: " + companyUid);
+            return;
+          }
+
+          // navigate the opened tab to the existing company review page by _id
+          win.location.href = `/companies/${company._id}`;
+        } catch (err) {
+          console.error("Error opening company page:", err);
+          alert("Could not open company details. See console for details.");
+        }
+      }}
+      className="border border-[#194185] text-[#194185] px-4 py-2 rounded-full hover:bg-[#19418510] transition-colors text-sm font-medium"
+      title="Open company review page"
+    >
+      View company
+    </button>
+  );
+})()}
               </div>
 
               <div className="text-[#194185] font-semibold text-[24px] mb-5">
