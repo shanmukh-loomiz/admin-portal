@@ -20,7 +20,8 @@ export default function EditProduct() {
     productId: "",
     productName: "",
     description: "",
-    category: "",
+    primaryCategory: "",   // Audience / Target Group: Men, Women, Kids
+    secondaryCategory: "", // Product Type: Dresses, Tops, Bottoms, Accessories, Outerwear
     priceRange: "",
     quantityPerOrder: ""
   });
@@ -72,7 +73,8 @@ export default function EditProduct() {
           productId: product.productId || "",
           productName: product.productName || "",
           description: product.description || "",
-          category: product.category || "",
+          primaryCategory: product.primaryCategory || "",
+          secondaryCategory: product.secondaryCategory || "",
           priceRange: product.priceRange || "",
           quantityPerOrder: product.quantityPerOrder || ""
         });
@@ -172,7 +174,7 @@ export default function EditProduct() {
   const handleImageUpload = (e, type) => {
     const files = Array.from(e.target.files);
     const validFiles = files.filter((file) =>
-      ["image/jpeg", "image/png", "image/svg+xml", "application/pdf"].includes(file.type)
+      ["image/jpeg", "image/png", "application/pdf"].includes(file.type)
     );
 
     if (validFiles.length === 0) {
@@ -428,20 +430,38 @@ export default function EditProduct() {
               onChange={handleChange}
             />
           </div>
+{/* Primary Category (Audience / Target Group) */}
           <div>
-            <label className="text-sm font-semibold">Category</label>
-            <select 
+            <label className="text-sm font-semibold">Primary Category (Audience / Target Group)</label>
+            <select
               className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm h-[48px]"
-              name="category"
-              value={productData.category}
+              name="primaryCategory"
+              value={productData.primaryCategory}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select</option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="kids">Kids</option>
+            </select>
+          </div>
+
+          {/* Secondary Category (Product Type) */}
+          <div>
+            <label className="text-sm font-semibold">Secondary Category (Product Type)</label>
+            <select
+              className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm h-[48px]"
+              name="secondaryCategory"
+              value={productData.secondaryCategory}
               onChange={handleChange}
             >
               <option value="">Select</option>
               <option value="dresses">Dresses</option>
               <option value="tops">Tops</option>
               <option value="bottoms">Bottoms</option>
-              <option value="outerwear">Outerwear</option>
               <option value="accessories">Accessories</option>
+              <option value="outerwear">Outerwear</option>
             </select>
           </div>
         </div>

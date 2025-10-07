@@ -10,14 +10,15 @@ export default function AddProduct() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Form data state
-  const [productData, setProductData] = useState({
-    productId: "",
-    productName: "",
-    description: "",
-    category: "",
-    priceRange: "",
-    quantityPerOrder: ""
-  });
+const [productData, setProductData] = useState({
+  productId: "",
+  productName: "",
+  description: "",
+  primaryCategory: "",   // Audience / Target Group: Men, Women, Kids
+  secondaryCategory: "", // Product Type: Dresses, Tops, Bottoms, Accessories, Outerwear
+  priceRange: "",
+  quantityPerOrder: ""
+});
 
   // Show input for new field
   const [showFieldInput, setShowFieldInput] = useState(false);
@@ -113,11 +114,11 @@ export default function AddProduct() {
   const handleImageUpload = (e, type) => {
     const files = Array.from(e.target.files);
     const validFiles = files.filter((file) =>
-      ["image/jpeg", "image/png", "image/svg+xml", "application/pdf"].includes(file.type)
+      ["image/jpeg", "image/png", "application/pdf"].includes(file.type)
     );
 
     if (validFiles.length === 0) {
-      toast.error("Please upload valid file formats (jpg, png, svg, pdf)");
+      toast.error("Please upload valid file formats (jpg, png, pdf)");
       return;
     }
     
@@ -315,22 +316,41 @@ export default function AddProduct() {
               onChange={handleChange}
             />
           </div>
+          {/* Primary Category (Audience / Target Group) */}
           <div>
-            <label className="text-sm font-semibold">Category</label>
-            <select 
+            <label className="text-sm font-semibold">Primary Category (Audience / Target Group)</label>
+            <select
               className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm h-[48px]"
-              name="category"
-              value={productData.category}
+              name="primaryCategory"
+              value={productData.primaryCategory}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Select</option>
+              <option value="men">Men</option>
+              <option value="women">Women</option>
+              <option value="kids">Kids</option>
+            </select>
+          </div>
+
+          {/* Secondary Category (Product Type) */}
+          <div>
+            <label className="text-sm font-semibold">Secondary Category (Product Type)</label>
+            <select
+              className="w-full border border-gray-300 rounded-md px-4 py-2 text-sm h-[48px]"
+              name="secondaryCategory"
+              value={productData.secondaryCategory}
               onChange={handleChange}
             >
               <option value="">Select</option>
               <option value="dresses">Dresses</option>
               <option value="tops">Tops</option>
               <option value="bottoms">Bottoms</option>
-              <option value="outerwear">Outerwear</option>
               <option value="accessories">Accessories</option>
+              <option value="outerwear">Outerwear</option>
             </select>
           </div>
+
         </div>
 
         {/* Right Section */}
@@ -354,11 +374,11 @@ export default function AddProduct() {
                 ref={productInputRef}
                 onChange={(e) => handleImageUpload(e, "product")}
                 className="hidden"
-                accept="image/jpeg, image/png, image/svg+xml, application/pdf"
+                accept="image/jpeg, image/png, application/pdf"
                 multiple
               />
               <p className="text-xs text-gray-600 text-center">
-                You can upload up to 5 files in jpg, png, svg, pdf formats
+                You can upload up to 5 files in jpg, png, pdf formats
               </p>
               {renderUploadedFiles(uploadedImages, "product")}
             </div>
@@ -383,11 +403,11 @@ export default function AddProduct() {
                 ref={measurementInputRef}
                 onChange={(e) => handleImageUpload(e, "measurement")}
                 className="hidden"
-                accept="image/jpeg, image/png, image/svg+xml, application/pdf"
+                accept="image/jpeg, image/png, application/pdf"
                 multiple
               />
               <p className="text-xs text-gray-600 text-center">
-                You can upload up to 5 files in jpg, png, svg, pdf formats
+                You can upload up to 5 files in jpg, png, pdf formats
               </p>
               {renderUploadedFiles(measurementFiles, "measurement")}
             </div>

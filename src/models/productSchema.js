@@ -18,9 +18,16 @@ const ProductSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  category: {
+  primaryCategory: {
+    type: String,
+    required: [true, 'Please provide a primary category (Audience / Target Group)'],
+    trim: true,
+    index: true,
+  },
+  secondaryCategory: {
     type: String,
     trim: true,
+    index: true,
   },
   priceRange: {
     type: String,
